@@ -85,8 +85,8 @@ def start_processing(args: argparse.Namespace):
     else:
         is_image = True
 
-    if not args.wd_id:
-        logger.error('"wd-id" is not provided!')
+    if not args.wd_id and not args.wd_name:
+        logger.error('"wd-id" or "wd-name" is required, but nothing has been provided!')
         return
 
     if not args.options:
@@ -125,10 +125,11 @@ def start_processing(args: argparse.Namespace):
     processing.start(
         args.name,
         args.image_id or args.mosaic_id,
-        args.wd_id,
-        geometry,
-        blocks,
-        args.project_id,
+        wd_id=args.wd_id,
+        wd_name=args.wd_name,
+        geometry=geometry,
+        blocks=blocks,
+        project_id=args.project_id,
         is_image=is_image,
     )
 
@@ -142,7 +143,8 @@ def main():
 
     parser.add_argument("command", choices=["models", "start", "status", "download"])
     parser.add_argument("-n", "--name", action="store")
-    parser.add_argument("--wd-id", action="store")
+    parser.add_argument("--wd-id", action="store", help="Workflow definition ID")
+    parser.add_argument("--wd-name", action="store", help="Workflow definition name (alternative to --wd-id)")
     parser.add_argument("--project-id", action="store", help="Processing will be created in the Deafault project if no other is provided")
     parser.add_argument("-o", "--options", action="store", help="[] if not provided")
     parser.add_argument("-g", "--geometry", action="store", help="Path to the geometry (AOI). If not provided - the footprint of the 'image' or 'mosaic' will be used automatically")

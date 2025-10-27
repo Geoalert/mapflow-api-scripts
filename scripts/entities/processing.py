@@ -30,12 +30,34 @@ class Processing:
         self,
         name: str,
         source_id: str,
-        wd_id: str,
-        geometry: dict,
+        wd_id: Optional[str] = None,
+        wd_name: Optional[str] = None,
+        geometry: dict = None,
         blocks: Optional[list[dict]] = None,
         project_id: Optional[str] = None,
         is_image: bool = True,
     ):
+        # Resolve wd_id from wd_name if needed
+        if not wd_id and not wd_name:
+            logger.error('Either "wd_id" or "wd_name" is required!')
+            return None
+        
+        if wd_name and not wd_id:
+            models = self.get_wds()
+            if not models:
+                logger.error('Failed to retrieve workflow definitions')
+                return None
+            
+            matching_models = [model for model in models if model['name'] == wd_name]
+            if not matching_models:
+                logger.error(f'No workflow definition found with name "{wd_name}"')
+                return None
+            
+            if len(matching_models) > 1:
+                logger.warning(f'Multiple workflow definitions found with name "{wd_name}", using the first one')
+            
+            wd_id = matching_models[0]['id']
+            logger.info(f'Resolved workflow definition "{wd_name}" to ID: {wd_id}')
 
         source_params = {"imageIds": [source_id]} if is_image else {"mosaicId": source_id}
 

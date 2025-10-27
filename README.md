@@ -1,6 +1,6 @@
 # Mapflow CLI Tool
 
-A command-line interface for managing imagery mosaics (collections) and AI-powered image processing operations. This tool allows you to create mosaics, upload imagery, and run AI model processing on satellite and aerial imagery through the Mapflow-API.
+A command-line interface for managing imagery collections and running Mapflow AI image processing. This tool allows you to create collections (mosaics), upload images, and run AI model through the [Mapflow-API](https://docs.mapflow.ai/).
 
 ## Installation
 
@@ -14,7 +14,7 @@ A command-line interface for managing imagery mosaics (collections) and AI-power
 python -m venv .venv
 ```
 ```bash
-.venv/bin/activate  # On Windows: .venv\Scripts\activate
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 ```
 2. Install the project dependencies from `requirements.txt`
 
@@ -54,13 +54,13 @@ python -m scripts.mosaic create -n "mosaic_name" -t "tag1, tag2, ..."
 Single image uploading
 
 ```bash
-python -m scripts.mosaic upload -p "/path/to/single/image.tif" --mosaic-id "UUID"
+python -m scripts.mosaic upload -p "image.tif" --mosaic-id "UUID"
 ```
 
 Bulk uploading of images from the specified directory
 
 ```bash
-python -m scripts.mosaic upload -p "/path/to/directory/with/images" --mosaic-id "UUID"
+python -m scripts.mosaic upload -p "/images" --mosaic-id "UUID"
 ```
 
 Get list of all mosaics
@@ -116,7 +116,7 @@ python -m scripts.project processings --project-id "UUID"
 python -m scripts.processing COMMAND {models,start,status,download} [-h] [--mosaic-id MOSAIC_ID | --image-id IMAGE_ID] [-n NAME] [--wd-id WD_ID] [--project-id PROJECT_ID] [-o OPTIONS] [-g GEOMETRY] [--processing-id PROCESSING_ID] [-p PATH]
 ```
 `COMMAND`:
-- `models` - Displays a list of all the models available to user
+- `models` - Displays a list of all the models available for user
 - `start` - Starts a processing with the specified:
     - **name** `-n`, **image/mosaic** `--image/mosaic-id` (only one of these can be passed),
     - AI **model** id `--wd-id`,
@@ -137,6 +137,8 @@ python -m scripts.processing COMMAND {models,start,status,download} [-h] [--mosa
 - `-g` - Path to .geojson processing geometry (AOI)
 - `-p` - Path for downloading the processing results
 
+[!TIP] Istead of "wd-id" you can use "wd-name" argument with the texting name of the model. 
+
 ### Examples
 
 Get list of models
@@ -148,7 +150,7 @@ python -m scripts.processing models
 Full arguments processing start
 
 ```bash
-python -m scripts.processing start -n "processing_name" --image-id "UUID" --wd-id "UUID" --project-id "UUID" -o "Classification, Simplification, ..." -g "/path/to/geometry/aoi.geojson"
+python -m scripts.processing start -n "processing_name" --image-id "UUID" --wd-id "UUID" --project-id "UUID" -o "Classification, Simplification, ..." -g "aoi.geojson"
 ```
 Quick processing start
 
@@ -159,7 +161,7 @@ python -m scripts.processing start -n "processing_name" --mosaic-id "UUID" --wd-
 Download the processing results
 
 ```bash
-python -m scripts.processing download -p "/path/to/future/file/results.geojson" --processing-id "UUID"
+python -m scripts.processing download -p "results.geojson" --processing-id "UUID"
 ```
 Get processing status
 
