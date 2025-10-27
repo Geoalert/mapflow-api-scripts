@@ -137,7 +137,7 @@ python -m scripts.processing COMMAND {models,start,status,download} [-h] [--mosa
 - `-g` - Path to .geojson processing geometry (AOI)
 - `-p` - Path for downloading the processing results
 
-[!TIP] Istead of "wd-id" you can use "wd-name" argument with the texting name of the model. 
+> **Instead of "wd-id" you can use "wd-name" argument with the texting name of the model**
 
 ### Examples
 
